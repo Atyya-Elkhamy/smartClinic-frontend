@@ -1,0 +1,10 @@
+{
+  "precheck_title": "Pre-Check Survey",
+  "symptoms_label": "What symptoms are you experiencing?",
+  "duration_label": "How long have you had these symptoms?",
+  "chronic_label": "Do you have any chronic diseases?",
+  "meds_label": "Are you currently taking any medications?",
+  "visited_label": "Have you visited a doctor for this problem before?",
+  "allergy_label": "Do you have any drug allergies?",
+  "submit": "Submit"
+}
