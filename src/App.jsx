@@ -1,10 +1,12 @@
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Header from "./components/header";
 import Home from "./pages/home";
 import Report from "./pages/report";
+import Footer from "./components/footer";
+import DoctorDashboard from "./pages/doctorDashboard";
+import PatientQueue from "./components/PatientQueue";
 
 function App() {
   return (
@@ -12,10 +14,12 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/report" element={<Report />}></Route>
-          <Route path="/register" element={<Register />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/queue" element={<PatientQueue />} />
         </Routes>
       </BrowserRouter>
     </>

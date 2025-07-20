@@ -2,62 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../store/slices/accounts";
-import earthyTones from "../colors";
-
-const styles = {
-  wrapper: {
-    maxWidth: "420px",
-    margin: "40px auto",
-    background: earthyTones.beige,
-    borderRadius: "12px",
-    boxShadow: `0 2px 12px ${earthyTones.mocha}22`,
-    padding: "32px 28px",
-    fontFamily: "Segoe UI, Arial, sans-serif",
-    color: earthyTones.clay,
-  },
-  title: {
-    fontWeight: 700,
-    fontSize: "2rem",
-    color: earthyTones.brown,
-    textAlign: "center",
-    marginBottom: "18px",
-  },
-  label: {
-    fontWeight: 600,
-    color: earthyTones.mocha,
-    marginBottom: "6px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px 14px",
-    border: `1px solid ${earthyTones.mocha}`,
-    borderRadius: "6px",
-    fontSize: "1rem",
-    marginBottom: "10px",
-    background: earthyTones.light,
-    color: earthyTones.clay,
-    outline: "none",
-  },
-  error: {
-    color: "#b71c1c",
-    fontSize: "0.95rem",
-    marginBottom: "8px",
-  },
-  button: {
-    width: "100%",
-    background: earthyTones.brown,
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    padding: "12px",
-    fontWeight: 600,
-    fontSize: "1rem",
-    cursor: "pointer",
-    boxShadow: `0 1px 4px ${earthyTones.mocha}22`,
-    marginTop: "10px",
-    transition: "background 0.2s",
-  },
-};
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -92,48 +36,68 @@ const Login = () => {
     }
   };
   return (
-    <div style={styles.wrapper}>
-      <h2 style={styles.title}>Login</h2>
-      <form onSubmit={handleSubmit}>
-        {formErrors?.general && (
-          <div style={styles.error}>{formErrors.general}</div>
-        )}
-        <div>
-          <label htmlFor="username" style={styles.label}>
-            Username:
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          {formErrors.username && (
-            <div style={styles.error}>{formErrors.username}</div>
-          )}
+    <div className="container my-5">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-6 col-lg-5">
+          <div className="card shadow-sm border-0">
+            <div className="card-body">
+              <h2 className="card-title text-center fw-bold text-primary mb-4">
+                Login
+              </h2>
+              <form onSubmit={handleSubmit}>
+                {formErrors?.general && (
+                  <div className="alert alert-danger">{formErrors.general}</div>
+                )}
+                <div className="mb-3">
+                  <label
+                    htmlFor="username"
+                    className="form-label fw-semibold text-secondary"
+                  >
+                    Username:
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  {formErrors.username && (
+                    <div className="text-danger small">{formErrors.username}</div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="password"
+                    className="form-label fw-semibold text-secondary"
+                  >
+                    Password:
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  {formErrors.password && (
+                    <div className="text-danger small">{formErrors.password}</div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 fw-bold"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password" style={styles.label}>
-            Password:
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            style={styles.input}
-          />
-          {formErrors.password && (
-            <div style={styles.error}>{formErrors.password}</div>
-          )}
-        </div>
-        <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

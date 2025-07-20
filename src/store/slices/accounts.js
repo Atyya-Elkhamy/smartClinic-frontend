@@ -21,11 +21,11 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async () => {
     try {
       await logout();
     } catch (error) {
-      console.error("Loged out");
+      console.error("Loged out", error);
     } finally {
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
@@ -59,7 +59,7 @@ export const refreshToken = createAsyncThunk(
     } catch (error) {
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
-      return rejectWithValue("Refresh failed");
+      return rejectWithValue("Refresh failed", error.response?.data || "Session expired");
     }
   }
 );
@@ -72,7 +72,7 @@ const authSlice = createSlice({
     refresh: refresh || null,
     loading: false,
     error: null,
-    formError:null,
+    formError: null,
     isAuthenticated: !!access,
   },
   reducers: {},
@@ -123,8 +123,7 @@ const authSlice = createSlice({
         state.access = null;
         state.refresh = null;
         state.isAuthenticated = false;
-      })
-
+      });
   },
 });
 
