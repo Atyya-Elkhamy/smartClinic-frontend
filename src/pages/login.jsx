@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../store/slices/accounts";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading } = useSelector((state) => state.auth);
@@ -32,17 +34,17 @@ const Login = () => {
         }
       }
     } catch (error) {
-      setFormErrors({ general: "Unexpected error occurred." }, error);
+      setFormErrors({ general: t("unexpected_error") }, error);
     }
   };
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <div className="container">
+      <div className="row justify-content-center py-5">
         <div className="col-12 col-md-6 col-lg-5">
           <div className="card shadow-sm border-0">
             <div className="card-body">
               <h2 className="card-title text-center fw-bold text-primary mb-4">
-                Login
+                {t("login")}
               </h2>
               <form onSubmit={handleSubmit}>
                 {formErrors?.general && (
@@ -53,7 +55,7 @@ const Login = () => {
                     htmlFor="username"
                     className="form-label fw-semibold text-secondary"
                   >
-                    Username:
+                    {t("username")}:
                   </label>
                   <input
                     type="text"
@@ -72,7 +74,7 @@ const Login = () => {
                     htmlFor="password"
                     className="form-label fw-semibold text-secondary"
                   >
-                    Password:
+                    {t("password")}:
                   </label>
                   <input
                     type="password"
@@ -91,7 +93,7 @@ const Login = () => {
                   className="btn btn-primary w-100 fw-bold"
                   disabled={loading}
                 >
-                  {loading ? "Logging in..." : "Login"}
+                  {loading ? t("logging_in") : t("login")}
                 </button>
               </form>
             </div>

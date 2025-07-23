@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/slices/accounts";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t } = useTranslation();
   const { formError } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setFormErrors({ confirmPassword: "Passwords do not match" });
+      setFormErrors({ confirmPassword: t("passwords_do_not_match") });
       return;
     }
     try {
@@ -48,23 +50,23 @@ const Register = () => {
       setFormErrors({});
       navigate("/login");
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error(t("registration_failed"), error);
     }
   };
 
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <div className="container">
+      <div className="row justify-content-center py-5">
         <div className="col-12 col-md-7 col-lg-6">
           <div className="card shadow-sm border-0">
             <div className="card-body">
               <h2 className="card-title text-center fw-bold text-primary mb-4">
-                User Register
+                {t("user_register")}
               </h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
-                    Username:
+                    {t("username")}:
                   </label>
                   <input
                     type="text"
@@ -80,7 +82,7 @@ const Register = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
-                    Email:
+                    {t("email")}:
                   </label>
                   <input
                     type="email"
@@ -96,7 +98,7 @@ const Register = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
-                    Phone:
+                    {t("phone")}:
                   </label>
                   <input
                     type="tel"
@@ -112,7 +114,7 @@ const Register = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
-                    Password:
+                    {t("password")}:
                   </label>
                   <input
                     type="password"
@@ -128,7 +130,7 @@ const Register = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
-                    Confirm Password:
+                    {t("confirm_password")}:
                   </label>
                   <input
                     type="password"
@@ -148,7 +150,7 @@ const Register = () => {
                   type="submit"
                   className="btn btn-primary w-100 fw-bold"
                 >
-                  Register
+                  {t("register")}
                 </button>
               </form>
             </div>
