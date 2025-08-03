@@ -11,18 +11,21 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
     phone: "",
+    address: "",
+    age: "",
+    gender: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     if (formError && typeof formError === "object") {
-      setFormErrors(formError);
+      setFormErrors(formError.errors || {});
     }
   }, [formError]);
 
@@ -34,18 +37,22 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setFormErrors({ confirmPassword: t("passwords_do_not_match") });
+    if (formData.password !== formData.password_confirmation) {
+      setFormErrors({ password_confirmation: t("passwords_do_not_match") });
       return;
     }
+
     try {
       await dispatch(registerUser(formData)).unwrap();
       setFormData({
-        username: "",
+        name: "",
         email: "",
         password: "",
-        confirmPassword: "",
+        password_confirmation: "",
         phone: "",
+        address: "",
+        age: "",
+        gender: "",
       });
       setFormErrors({});
       navigate("/login");
@@ -64,22 +71,25 @@ const Register = () => {
                 {t("user_register")}
               </h2>
               <form onSubmit={handleSubmit}>
+                {/* Name */}
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
                     {t("username")}:
                   </label>
                   <input
                     type="text"
-                    name="username"
-                    value={formData.username}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     className="form-control"
                     required
                   />
-                  {formErrors.username && (
-                    <div className="text-danger small">{formErrors.username}</div>
+                  {formErrors.name && (
+                    <div className="text-danger small">{formErrors.name[0]}</div>
                   )}
                 </div>
+
+                {/* Email */}
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
                     {t("email")}:
@@ -93,9 +103,11 @@ const Register = () => {
                     required
                   />
                   {formErrors.email && (
-                    <div className="text-danger small">{formErrors.email}</div>
+                    <div className="text-danger small">{formErrors.email[0]}</div>
                   )}
                 </div>
+
+                {/* Phone */}
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
                     {t("phone")}:
@@ -109,9 +121,68 @@ const Register = () => {
                     required
                   />
                   {formErrors.phone && (
-                    <div className="text-danger small">{formErrors.phone}</div>
+                    <div className="text-danger small">{formErrors.phone[0]}</div>
                   )}
                 </div>
+
+                {/* Address */}
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary">
+                    {t("address")}:
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                  {formErrors.address && (
+                    <div className="text-danger small">{formErrors.address[0]}</div>
+                  )}
+                </div>
+
+                {/* Age */}
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary">
+                    {t("age")}:
+                  </label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                  {formErrors.age && (
+                    <div className="text-danger small">{formErrors.age[0]}</div>
+                  )}
+                </div>
+
+                {/* Gender */}
+                <div className="mb-3">
+                  <label className="form-label fw-semibold text-secondary">
+                    {t("gender")}:
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="form-select"
+                    required
+                  >
+                    <option value="">{t("select_gender")}</option>
+                    <option value="male">{t("male")}</option>
+                    <option value="female">{t("female")}</option>
+                  </select>
+                  {formErrors.gender && (
+                    <div className="text-danger small">{formErrors.gender[0]}</div>
+                  )}
+                </div>
+
+                {/* Password */}
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
                     {t("password")}:
@@ -125,31 +196,31 @@ const Register = () => {
                     required
                   />
                   {formErrors.password && (
-                    <div className="text-danger small">{formErrors.password}</div>
+                    <div className="text-danger small">{formErrors.password[0]}</div>
                   )}
                 </div>
+
+                {/* Confirm Password */}
                 <div className="mb-3">
                   <label className="form-label fw-semibold text-secondary">
                     {t("confirm_password")}:
                   </label>
                   <input
                     type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
+                    name="password_confirmation"
+                    value={formData.password_confirmation}
                     onChange={handleChange}
                     className="form-control"
                     required
                   />
-                  {formErrors.confirmPassword && (
+                  {formErrors.password_confirmation && (
                     <div className="text-danger small">
-                      {formErrors.confirmPassword}
+                      {formErrors.password_confirmation[0]}
                     </div>
                   )}
                 </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary w-100 fw-bold"
-                >
+
+                <button type="submit" className="btn btn-primary w-100 fw-bold">
                   {t("register")}
                 </button>
               </form>

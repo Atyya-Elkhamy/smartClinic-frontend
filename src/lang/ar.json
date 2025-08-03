@@ -61,6 +61,14 @@
   "about_us": "عن العيادة",
   "contact_us": "اتصل بنا",
   "add_symptom": "إضافة عرض",
-  "add_disease": "إضافة مرض"
+  "add_disease": "إضافة مرض",
+  "address": "العنوان",
+  "age": "العمر",
+  "gender": "الجنس",
+  "male": "ذكر",
+  "login_as": "تسجيل الدخول كـ",
+  "patient": "مريض",
+  "doctor": "طبيب",
+  "unexpected_error": "حدث خطأ غير متوقع"
 
 }

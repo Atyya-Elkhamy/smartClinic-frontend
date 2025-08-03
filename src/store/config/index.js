@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 // Attach access token to every request
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -22,6 +22,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("the error is", error);
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;

@@ -42,15 +42,13 @@ const Header = () => {
         </button>
 
         <div
-          className={`collapse navbar-collapse ${
-            isNavCollapsed ? "" : "show"
-          }`}
+          className={`collapse navbar-collapse ${isNavCollapsed ? "" : "show"
+            }`}
           id="navbarSupportedContent"
         >
           <ul
-            className={`navbar-nav me-auto mb-2 mb-lg-0 ${
-              isRTL ? "m-auto" : "m-auto"
-            }`}
+            className={`navbar-nav me-auto mb-2 mb-lg-0 ${isRTL ? "m-auto" : "m-auto"
+              }`}
           >
             <li className="nav-item">
               <Link className="nav-link text-secondary fw-bold fs-5" to="/about-us">
@@ -80,19 +78,35 @@ const Header = () => {
                     className="dropdown-menu dropdown-menu-end"
                     aria-labelledby="userDropdown"
                   >
-                    <li>
-                      <Link className="dropdown-item" to="/queue">
-                        {t("show_number")}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="#">
-                        {t("update_data")}
-                      </Link>
-                    </li>
+                    {user.role === 'doctor' ? (
+                      <>
+                        <li>
+                          <Link className="dropdown-item" to="/doctor-profile">
+                            {t("profile")}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/doctor-dashboard">
+                            {t("dashboard")}
+                          </Link>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li>
+                          <Link className="dropdown-item" to="/queue">
+                            {t("show_number")}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="#">
+                            {t("update_data")}
+                          </Link>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
-
                 <button
                   className="btn btn-primary fw-semibold"
                   onClick={handleLogout}

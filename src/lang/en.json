@@ -63,5 +63,19 @@
   "about_us": "About Us",
   "our_location":" Our Location",
   "add_symptom": "Add Symptom",
-  "add_disease": "Add Disease"
+  "add_disease": "Add Disease",
+  "address": "Address",
+  "age": "Age",
+  "gender": "Gender",
+  "male": "Male",
+  "login_as": "Login as",
+  "patient": "Patient",
+  "doctor": "Doctor",
+  "unexpected_error": "An unexpected error occurred",
+  "unauthorized": "Unauthorized",
+  "you_do_not_have_permission_to_access_this_page": "You do not have permission to access this page.",
+  "go_home": "Go Home",
+  "page_not_found": "Page Not Found",
+  "the_page_you_are_looking_for_does_not_exist": "The page you are looking for does not exist."
+
 }
