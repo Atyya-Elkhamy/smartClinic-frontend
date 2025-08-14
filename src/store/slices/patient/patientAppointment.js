@@ -1,21 +1,77 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  getPatientAppointments,
+  getAllAppointments,
   addPatientAppointment,
   updatePatientAppointment,
   deletePatientAppointment,
+  getTodayAppointment,
+  getAppointmentTime,
+  getAppointmenTreatment,
+  getAppointmentDetails,
 } from "../../config/apis";
 
 // Fetch all appointments
 export const fetchAllAppointments = createAsyncThunk(
   "appointments/list",
-  async (id, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await getPatientAppointments(id);
+      const response = await getAllAppointments();
       return response.data;
     } catch (error) {
       console.error("Error fetching appointments", error?.response?.data || error.message);
       return rejectWithValue(error?.response?.data || "An error occurred");
+    }
+  }
+);
+
+export const fetchAppointmentDetails = createAsyncThunk(
+  "appointments/details",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await getAppointmentDetails(id);
+      return { id, details: response.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || "Failed to fetch appointment details");
+    }
+  }
+);
+
+// Fetch today's appointments
+export const fetchTodayAppointments = createAsyncThunk(
+  "appointments/today",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getTodayAppointment();
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || "Failed to fetch today's appointments");
+    }
+  }
+);
+
+// Fetch appointment expected time
+export const fetchAppointmentTime = createAsyncThunk(
+  "appointments/time",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await getAppointmentTime(id);
+      return { id, time: response.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || "Failed to fetch appointment time");
+    }
+  }
+);
+
+// Fetch appointment treatments
+export const fetchAppointmentTreatment = createAsyncThunk(
+  "appointments/treatment",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await getAppointmenTreatment(id);
+      console.log(response.data)
+      return { id, treatments: response.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || "Failed to fetch appointment treatments");
     }
   }
 );
@@ -63,7 +119,11 @@ export const deleteAppointmentById = createAsyncThunk(
 );
 
 const initialState = {
-  projects: [],
+  appointments: [],
+  today: [],
+  appointmentTimes: {},
+  appointmentTreatments: {},
+  appointmentDetails: {},
   loading: false,
   error: null,
 };
@@ -87,49 +147,44 @@ const appointmentSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Add
-      .addCase(addNewAppointment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+
+      // Fetch today's
+      .addCase(fetchTodayAppointments.fulfilled, (state, action) => {
+        state.today = action.payload;
       })
+
+      // Fetch appointment time
+      .addCase(fetchAppointmentTime.fulfilled, (state, action) => {
+        state.appointmentTimes[action.payload.id] = action.payload.time;
+      })
+
+      // Fetch appointment treatments
+      .addCase(fetchAppointmentTreatment.fulfilled, (state, action) => {
+        state.appointmentTreatments[action.payload.id] = action.payload.treatments;
+      })
+
+      // Add
       .addCase(addNewAppointment.fulfilled, (state, action) => {
-        state.loading = false;
         state.appointments.push(action.payload);
       })
-      .addCase(addNewAppointment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+
       // Update
-      .addCase(updateExistingAppointment.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(updateExistingAppointment.fulfilled, (state, action) => {
-        state.loading = false;
         const index = state.appointments.findIndex(p => p.id === action.payload.id);
         if (index !== -1) {
           state.appointments[index] = action.payload.updatedData;
         }
       })
-      .addCase(updateExistingAppointment.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+
       // Delete
-      .addCase(deleteAppointmentById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(deleteAppointmentById.fulfilled, (state, action) => {
-        state.loading = false;
         state.appointments = state.appointments.filter(p => p.id !== action.payload);
       })
-      .addCase(deleteAppointmentById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+
+      .addCase(fetchAppointmentDetails.fulfilled, (state, action) => {
+        state.appointmentDetails[action.payload.id] = action.payload.details;
       });
-  },
+},
 });
 
 export default appointmentSlice.reducer;

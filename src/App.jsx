@@ -2,22 +2,19 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-
 // Pages & Components
-import Login from "./pages/login";
-import Register from "./pages/register";
-import Home from "./pages/home";
-import Report from "./pages/report";
-import DoctorDashboard from "./pages/doctorDashboard";
-import PatientQueue from "./components/PatientQueue";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Report from "./pages/Report";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import AboutUs from "./components/aboutUs";
-import Unauthorized from "./pages/unauthorized";
-import NotFound from "./pages/notFound";
+import Unauthorized from "./pages/Unauthorized";
+import NotFound from "./pages/NotFound";
 import Header from "./components/header";
 import ProtectedRoute from "./components/protectRoute";
-
-// Styles
 import "./App.css";
+import PatientData from "./pages/PatientDashboard";
 
 function DirectionHandler() {
   const { i18n } = useTranslation();
@@ -51,8 +48,8 @@ function App() {
             {/* Protected Patient Routes */}
             <Route element={<ProtectedRoute allowedRoles={["patient"]} />}>
               <Route path="/report" element={<Report />} />
-              <Route path="/queue" element={<PatientQueue />} />
             </Route>
+            <Route path="/patientData" element={<PatientData />} />
 
             {/* Unauthorized Access */}
             <Route path="/unauthorized" element={<Unauthorized />} />

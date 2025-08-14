@@ -13,7 +13,6 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "patient",
   });
 
   const [formErrors, setFormErrors] = useState({});

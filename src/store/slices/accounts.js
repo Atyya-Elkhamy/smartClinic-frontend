@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { login, logout, refresh_token, register , doctorLogin } from "../config/apis";
+import { login, logout, refresh_token, register } from "../config/apis";
 
 // Get saved tokens/user from localStorage
 let token = localStorage.getItem("token") || null;
@@ -16,15 +16,12 @@ try {
 // Login
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async ({ email, password, role }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const payload = { email, password };
-      const response = role === "doctor"
-        ? await doctorLogin(payload)
-        : await login(payload);
-
-      const { token, user } = response.data.data;
-
+      const response =  await login(payload);
+      const { token, user } = response.data;
+      console.log("the login response is:",response)
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 

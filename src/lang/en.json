@@ -9,7 +9,6 @@
   "submit": "Submit",
   "clinic_name": "Smart Clinic",
   "book_appointment": "Book Appointment",
-  "login": "Login",
   "logout": "Logout",
   "register": "Register",
   "user_register": "User Register",
@@ -114,6 +113,12 @@
   "cta_title": "Get your diagnosis today",
   "cta_sub": "Submit your symptoms now and receive your treatment plan directly from the doctor.",
   "login": "Log in",
-   "no_account": "Don't have an account?",
-  "sign_up": "Sign up"
+  "no_account": "Don't have an account?",
+  "sign_up": "Sign up",
+  "today_appointments": "Today's Appointments",
+  "appointment_id": "Appointment ID",
+  "appointment_date": "Appointment Date",
+  "visit_reason": "Visit Reason",
+  "no_appointments": "No appointments found",
+  "loading": "Loading..."
 }
