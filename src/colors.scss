@@ -7,12 +7,14 @@
 // $body-bg: #FAFFCA;   
 // @import "bootstrap/scss/bootstrap";
 
-$primary: #638ECB;      // clay
-$secondary: #8AAEE0;    // mocha
-$info: #B1C9EF;         // beige
-$light: #D5DEEF;        // light
-$dark: #395886;         // brown
-$body-bg: #F0F3FA;   
+// $primary: #638ECB;      // clay
+// $secondary: #8AAEE0;    // mocha
+// $info: #B1C9EF;         // beige
+// $light: #D5DEEF;        // light
+// $dark: #395886;         // brown
+// $body-bg: #F0F3FA;   
+ 
+
 // @import "bootstrap/scss/bootstrap";
 
 // $primary:    #A89CD9;   // Orchid Purple
@@ -22,5 +24,19 @@ $body-bg: #F0F3FA;
 // $dark:       #D7C6ED; 
 // $black:       #2a2a2b;   // Lavender Mist
 //    // Blush Pink
+ // 🎨 Brand palette (variables only)
+$primary:   #1B3C53;  // navy
+$secondary: #456882;  // steel blue
+$info:      #D2C1B6;  // beige
+$light:     #F9F3EF;  // soft white
+$dark:      #1B3C53;  // deep navy
+$body-bg:   #F9F3EF;  // clean background
 
-@import "bootstrap/scss/bootstrap";
+:root {
+  --sc-primary:   #{$primary};
+  --sc-secondary: #{$secondary};
+  --sc-accent:    #{$info};
+  --sc-bg:        #{$light};
+  --sc-text:      #0f1a22;
+  --sc-border:    #C9D3DB;
+}

@@ -4,7 +4,7 @@ import { loginUser } from "../store/slices/accounts";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "react-bootstrap/Spinner";
-
+import Footer from "../components/footer";
 const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -45,82 +45,130 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="col-md-6">
-        <div className="card shadow p-4">
-          <h3 className="text-center mb-4">{t("login")}</h3>
+    <>
+      <div className="login-container m-4">
+        {/* Left side - form */}
+        <div className="login-form-section">
+          <div className="login-form-wrapper">
+            <h3 className="login-title  --sc-primary ">{t("login")}</h3>
 
-          {formErrors.general && (
-            <div className="alert alert-danger">{formErrors.general}</div>
-          )}
+            {formErrors.general && (
+              <div className="alert alert-danger">{formErrors.general}</div>
+            )}
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label fw-semibold text-secondary">
-                {t("email")}
-              </label>
-              <input
-                type="email"
-                className={`form-control ${formErrors.email ? "is-invalid" : ""}`}
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.email && (
-                <div className="invalid-feedback">{formErrors.email}</div>
-              )}
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label
+                  htmlFor="email"
+                  className="form-label fw-semibold text-secondary"
+                >
+                  {t("email")}
+                </label>
+                <input
+                  type="email"
+                  className={`form-control ${
+                    formErrors.email ? "is-invalid" : ""
+                  }`}
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.email && (
+                  <div className="invalid-feedback">{formErrors.email}</div>
+                )}
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label fw-semibold text-secondary">
-                {t("password")}
-              </label>
-              <input
-                type="password"
-                className={`form-control ${formErrors.password ? "is-invalid" : ""}`}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.password && (
-                <div className="invalid-feedback">{formErrors.password}</div>
-              )}
-            </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="password"
+                  className="form-label fw-semibold text-secondary"
+                >
+                  {t("password")}
+                </label>
+                <input
+                  type="password"
+                  className={`form-control ${
+                    formErrors.password ? "is-invalid" : ""
+                  }`}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.password && (
+                  <div className="invalid-feedback">{formErrors.password}</div>
+                )}
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="role" className="form-label fw-semibold text-secondary">
-                {t("login_as")}
-              </label>
-              <select
-                id="role"
-                name="role"
-                className="form-select"
-                value={formData.role}
-                onChange={handleChange}
+              <div className="mb-3">
+                <label
+                  htmlFor="role"
+                  className="form-label fw-semibold text-secondary"
+                >
+                  {t("login_as")}
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  className="form-select"
+                  value={formData.role}
+                  onChange={handleChange}
+                >
+                  <option value="patient">{t("patient")}</option>
+                  <option value="doctor">{t("doctor")}</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                className="btn  w-100 d-flex justify-content-center align-items-center"
+                disabled={loading}
+                style={{
+                  background: "var(--sc-secondary)",
+                  color: "#fff",
+                  borderColor: "var(--sc-secondary)",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                }}
               >
-                <option value="patient">{t("patient")}</option>
-                <option value="doctor">{t("doctor")}</option>
-              </select>
-            </div>
+                {loading && (
+                  <Spinner animation="border" size="sm" className="me-2" />
+                )}
+                {t("login")}
+              </button>
 
-            <button
-              type="submit"
-              className="btn btn-primary w-100 d-flex justify-content-center align-items-center"
-              disabled={loading}
-            >
-              {loading && (
-                <Spinner animation="border" size="sm" className="me-2" />
-              )}
-              {t("login")}
-            </button>
-          </form>
+              <div className="text-center mt-3">
+                <span>
+                  {t("no_account", { defaultValue: "Don't have an account?" })}
+                </span>
+                <a href="/register" className="btn m-2" style={{
+                  background: "#fff",
+                  color: "var(--sc-secondary)",
+                  borderColor: "var(--sc-secondary)",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                }}>
+                  {t("sign_up", { defaultValue: "Sign up" })}
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right side - image */}
+        <div className="login-image-section">
+          <img
+            src="public/images/doctor-with-his-arms-crossed-white-background.jpg" // Change this to your image path
+            alt="Login visual"
+            className="login-side-image"
+          />
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

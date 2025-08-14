@@ -50,7 +50,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async () => {
 
 // Register
 export const registerUser = createAsyncThunk(
-  "auth/register",
+  "accounts/create",
   async (data, { rejectWithValue }) => {
     try {
       const response = await register(data);

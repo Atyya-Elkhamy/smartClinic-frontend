@@ -1,8 +1,288 @@
-.background-wrapper {
-  background-image: url("../public/images/img5.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  width: 100%;
+/* ================================
+   SmartClinic – App.css (palette-driven)
+   Uses CSS vars from colors.scss
+   ================================ */
+
+/* Base */
+:root {
+  /* fallback radii so buttons/cards feel soft */
+  --sc-radius: 12px;
+  --sc-radius-card: 16px;
 }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography tweaks to match the mockup vibe */
+h1, .display-1, .display-2, .display-3, .display-4 {
+  letter-spacing: -0.02em;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sc-primary);
+}
+
+/* Links / nav */
+a, .nav-link {
+  color: var(--sc-secondary);
+  text-decoration: none;
+}
+a:hover, .nav-link:hover {
+  color: var(--sc-primary);
+  text-decoration: none;
+}
+
+/* Buttons */
+.sc-btn-primary {
+  background: var(--sc-primary);
+  border: 1px solid var(--sc-primary);
+  color: #fff;
+  border-radius: var(--sc-radius);
+  transition: filter .15s ease, transform .03s ease;
+}
+.sc-btn-primary:hover { filter: brightness(.92); color: #fff; }
+.sc-btn-primary:active { transform: translateY(1px); }
+
+.sc-btn-outline {
+  background: #fff;
+  border: 1px solid var(--sc-primary);
+  color: var(--sc-primary);
+  border-radius: var(--sc-radius);
+  transition: background-color .15s ease, color .15s ease, transform .03s ease;
+}
+.sc-btn-outline:hover { background: var(--sc-primary); color: #fff; }
+.sc-btn-outline:active { transform: translateY(1px); }
+
+/* Focus (keyboard a11y) */
+.sc-btn-primary:focus-visible,
+.sc-btn-outline:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--sc-secondary) 30%, transparent);
+  outline-offset: 2px;
+}
+
+/* Cards + header bar */
+.sc-card {
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius-card);
+  box-shadow: 0 6px 20px rgba(16,37,53,.06);
+}
+
+.sc-header {
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background: rgba(249,243,239,.7); /* = light */
+  border-bottom: 1px solid var(--sc-border);
+}
+
+/* -----------------------------
+   Home – hero + helpers
+   ----------------------------- */
+.home-hero {
+  background:
+    radial-gradient(1200px 500px at 90% 10%, rgba(27,60,83,.08), rgba(27,60,83,0)),
+    radial-gradient(800px 400px at 0% 30%, rgba(210,193,182,.18), rgba(210,193,182,0));
+}
+
+/* the small beige pill above the headline */
+.home-pill {
+  background: var(--sc-accent);
+  border: 1px solid var(--sc-border);
+  color: #0f1a22;
+  padding: .45rem .75rem;
+}
+
+/* right-side “device” mock + floating badge */
+.home-device {
+  border-radius: 22px;
+  border: 1px solid var(--sc-border);
+}
+.home-device > .rounded-4 {
+  border-radius: 18px !important;
+}
+
+.home-floating {
+  position: absolute;
+  bottom: -18px;
+  inset-inline-start: 22%;
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(16,37,53,.10);
+}
+
+/* How-it-works icon squares */
+.step-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--sc-border);
+  background: #fff;
+  color: var(--sc-primary);
+  box-shadow: 0 4px 14px rgba(16,37,53,.06);
+}
+
+/* Section spacing helpers (optional) */
+.section-tight { padding-block: 2.5rem; }
+.section-roomy { padding-block: 4rem; }
+@media (min-width: 992px) {
+  .section-roomy { padding-block: 5rem; }
+}
+
+/* RTL niceties (Bootstrap already handles most) */
+[dir="rtl"] .home-floating { inset-inline-start: auto; inset-inline-end: 22%; }
+[dir="rtl"] .me-auto { margin-left: auto !important; margin-right: 0 !important; }
+[dir="rtl"] .ms-auto { margin-right: auto !important; margin-left: 0 !important; }
+
+/* Misc tweaks */
+.badge.rounded-pill.home-pill { border-radius: 999px; }
+.small, small { color: #6b7a86; } /* softer small text */
+ /* ==== Layout ==== */
+.login-container{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 1fr 1fr;      /* form | image */
+}
+
+.login-form-section{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  padding: clamp(16px, 3vw, 40px);
+}
+
+.login-form-wrapper{
+  width:100%;
+  max-width:420px;                      /* keep the form narrow on large screens */
+}
+
+/* Right image side */
+.login-image-section{
+  position:relative;
+  overflow:hidden;
+  min-height:100%;
+  margin-bottom: 100px;                /* space for footer */
+}
+.login-side-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;                     /* fill the area without distortion */
+  object-position:center;
+  display:block;
+}
+
+/* Typography + controls */
+.login-title{ font-weight:700; margin-bottom:24px; color:var(--sc-primary); }
+button.btn{ border-radius:12px; }
+
+/* Fix alert spacing on mobile */
+.alert{ margin-bottom:16px; }
+
+/* ====== Responsive ====== */
+@media (max-width: 992px){              /* tablets & below */
+  .login-container{
+    grid-template-columns: 1fr;         /* stack */
+  }
+  .login-image-section{
+    order:-1;                           /* image on top */
+    height: 38vh;                       /* hero-like height */
+    border-bottom:1px solid var(--sc-border);
+  }
+  .login-side-image{
+    height:100%;
+  }
+}
+
+@media (max-width: 480px){              /* small phones */
+  .login-form-wrapper{
+    max-width:100%;
+  }
+  .login-title{
+    font-size:1.5rem;
+  }
+}
+/* ===== Split layout (form | image) ===== */
+.auth-container{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.auth-form-section{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  padding: clamp(16px, 3vw, 40px);
+}
+
+.auth-form-wrapper{
+  width:100%;
+  max-width:450px;
+}
+
+.auth-title{
+  font-weight:700;
+  margin-bottom:24px;
+  color: var(--sc-primary);
+}
+
+/* Right image side */
+.auth-image-section{
+  position:relative;
+  overflow:hidden;
+  margin-bottom: 100px;
+}
+.auth-side-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+
+/* Buttons in brand colors */
+.btn.btn-primary{
+  background: var(--sc-primary);
+  border-color: var(--sc-primary);
+  border-radius: 12px;
+}
+.btn.btn-primary:hover{ filter: brightness(.92); }
+
+.btn.btn-outline-primary{
+  border-color: var(--sc-primary);
+  color: var(--sc-primary);
+  border-radius: 12px;
+}
+.btn.btn-outline-primary:hover{
+  background: var(--sc-primary);
+  color:#fff;
+}
+
+/* Small text tone */
+small, .small{ color:#6b7a86; }
+
+/* ===== Responsive ===== */
+@media (max-width: 992px){
+  .auth-container{ grid-template-columns: 1fr; }
+  .auth-image-section{
+    order:-1;               /* image on top */
+    height: 38vh;
+    border-bottom:1px solid var(--sc-border);
+  }
+}
+@media (max-width: 480px){
+  .auth-form-wrapper{ max-width:100%; }
+  .auth-title{ font-size:1.5rem; }
+}
+

@@ -1,234 +1,213 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../store/slices/accounts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Spinner from "react-bootstrap/Spinner";
+
+// ⬇️ If your action/path differs, change this import only
+import { registerUser } from "../store/slices/accounts";
+import Footer from "../components/footer";
+
+// import "./Auth.css"; // shared with Login
 
 const Register = () => {
   const { t } = useTranslation();
-  const { formError } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { loading } = useSelector((s) => s.auth || { loading: false });
 
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
-    password: "",
-    password_confirmation: "",
     phone: "",
     address: "",
     age: "",
     gender: "",
+    password: "",
+    confirmPassword: ""
   });
 
   const [formErrors, setFormErrors] = useState({});
 
-  useEffect(() => {
-    if (formError && typeof formError === "object") {
-      setFormErrors(formError.errors || {});
-    }
-  }, [formError]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setFormErrors((prev) => ({ ...prev, [name]: null }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.password_confirmation) {
-      setFormErrors({ password_confirmation: t("passwords_do_not_match") });
+
+    // Simple client-side check (keeps your server validation intact)
+    if (formData.password !== formData.confirmPassword) {
+      setFormErrors({ confirmPassword: t("passwords_not_match", { defaultValue: "Passwords don't match" }) });
       return;
     }
 
     try {
-      await dispatch(registerUser(formData)).unwrap();
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-        phone: "",
-        address: "",
-        age: "",
-        gender: "",
-      });
-      setFormErrors({});
-      navigate("/login");
-    } catch (error) {
-      console.error(t("registration_failed"), error);
+      const result = await dispatch(registerUser(formData));
+      if (registerUser.fulfilled?.match?.(result)) {
+        setFormErrors({});
+        navigate("/login"); // go to login after successful register
+      } else {
+        const errors = result.payload;
+        if (typeof errors === "object") setFormErrors(errors || {});
+        else setFormErrors({ general: errors || t("unexpected_error") });
+      }
+    } catch (err) {
+      setFormErrors({ general: t("unexpected_error", { defaultValue: "Something went wrong. Try again." }) });
     }
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center py-5">
-        <div className="col-12 col-md-7 col-lg-6">
-          <div className="card shadow-sm border-0">
-            <div className="card-body">
-              <h2 className="card-title text-center fw-bold text-primary mb-4">
-                {t("user_register")}
-              </h2>
-              <form onSubmit={handleSubmit}>
-                {/* Name */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("username")}:
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.name && (
-                    <div className="text-danger small">{formErrors.name[0]}</div>
-                  )}
-                </div>
+    <>
+    <div className="auth-container">
+      {/* Left: form */}
+      <div className="auth-form-section">
+        <div className="auth-form-wrapper">
+          <h3 className="auth-title">{t("register", { defaultValue: "User Register" })}</h3>
 
-                {/* Email */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("email")}:
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.email && (
-                    <div className="text-danger small">{formErrors.email[0]}</div>
-                  )}
-                </div>
+          {formErrors.general && (
+            <div className="alert alert-danger">{formErrors.general}</div>
+          )}
 
-                {/* Phone */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("phone")}:
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.phone && (
-                    <div className="text-danger small">{formErrors.phone[0]}</div>
-                  )}
-                </div>
-
-                {/* Address */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("address")}:
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.address && (
-                    <div className="text-danger small">{formErrors.address[0]}</div>
-                  )}
-                </div>
-
-                {/* Age */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("age")}:
-                  </label>
-                  <input
-                    type="number"
-                    name="age"
-                    value={formData.age}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.age && (
-                    <div className="text-danger small">{formErrors.age[0]}</div>
-                  )}
-                </div>
-
-                {/* Gender */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("gender")}:
-                  </label>
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    className="form-select"
-                    required
-                  >
-                    <option value="">{t("select_gender")}</option>
-                    <option value="male">{t("male")}</option>
-                    <option value="female">{t("female")}</option>
-                  </select>
-                  {formErrors.gender && (
-                    <div className="text-danger small">{formErrors.gender[0]}</div>
-                  )}
-                </div>
-
-                {/* Password */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("password")}:
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.password && (
-                    <div className="text-danger small">{formErrors.password[0]}</div>
-                  )}
-                </div>
-
-                {/* Confirm Password */}
-                <div className="mb-3">
-                  <label className="form-label fw-semibold text-secondary">
-                    {t("confirm_password")}:
-                  </label>
-                  <input
-                    type="password"
-                    name="password_confirmation"
-                    value={formData.password_confirmation}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                  {formErrors.password_confirmation && (
-                    <div className="text-danger small">
-                      {formErrors.password_confirmation[0]}
-                    </div>
-                  )}
-                </div>
-
-                <button type="submit" className="btn btn-primary w-100 fw-bold">
-                  {t("register")}
-                </button>
-              </form>
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("username", { defaultValue: "Username" })}</label>
+              <input
+                name="username"
+                className={`form-control ${formErrors.username ? "is-invalid" : ""}`}
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.username && <div className="invalid-feedback">{formErrors.username}</div>}
             </div>
-          </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("email", { defaultValue: "Email" })}</label>
+              <input
+                type="email"
+                name="email"
+                className={`form-control ${formErrors.email ? "is-invalid" : ""}`}
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("phone", { defaultValue: "Phone" })}</label>
+              <input
+                name="phone"
+                className={`form-control ${formErrors.phone ? "is-invalid" : ""}`}
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.phone && <div className="invalid-feedback">{formErrors.phone}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("address", { defaultValue: "Address" })}</label>
+              <input
+                name="address"
+                className={`form-control ${formErrors.address ? "is-invalid" : ""}`}
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.address && <div className="invalid-feedback">{formErrors.address}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("age", { defaultValue: "Age" })}</label>
+              <input
+                type="number"
+                name="age"
+                className={`form-control ${formErrors.age ? "is-invalid" : ""}`}
+                value={formData.age}
+                onChange={handleChange}
+                required
+                min={0}
+              />
+              {formErrors.age && <div className="invalid-feedback">{formErrors.age}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("gender", { defaultValue: "Gender" })}</label>
+              <select
+                name="gender"
+                className={`form-select ${formErrors.gender ? "is-invalid" : ""}`}
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">{t("select_gender", { defaultValue: "Select gender" })}</option>
+                <option value="male">{t("male", { defaultValue: "Male" })}</option>
+                <option value="female">{t("female", { defaultValue: "Female" })}</option>
+              </select>
+              {formErrors.gender && <div className="invalid-feedback">{formErrors.gender}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("password", { defaultValue: "Password" })}</label>
+              <input
+                type="password"
+                name="password"
+                className={`form-control ${formErrors.password ? "is-invalid" : ""}`}
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold text-secondary">{t("confirm_password", { defaultValue: "Confirm Password" })}</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                className={`form-control ${formErrors.confirmPassword ? "is-invalid" : ""}`}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.confirmPassword && <div className="invalid-feedback">{formErrors.confirmPassword}</div>}
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100 d-flex justify-content-center align-items-center mb-3"
+              disabled={loading}
+            >
+              {loading && <Spinner animation="border" size="sm" className="me-2" />}
+              {t("register", { defaultValue: "Register" })}
+            </button>
+
+            <div className="text-center">
+              <span>{t("have_account", { defaultValue: "Already have an account?" })}</span>
+              <Link to="/login" className="btn btn-outline-primary ms-2">
+                {t("login", { defaultValue: "Log in" })}
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
+
+      {/* Right: image */}
+      <div className="auth-image-section">
+        <img
+          src="public/images/doctor-with-his-arms-crossed-white-background.jpg"  /* place image in /public */
+          alt="Register"
+          className="auth-side-image"
+        />
+      </div>
+    
     </div>
+      <Footer />
+      </>
   );
 };
 
