@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import PatientsSection from "../components/allPatients";
-import DiseasesSection from "../components/diseases";
-import SymptomsSection from "../components/symptoms";
-import AppointmentsSection from "../components/allAppointments";
-import AddingFormModal from "../components/addingForm";
+import PatientsSection from "../components/doctor/AllPatients";
+import AppointmentsSection from "../components/doctor/AllAppointments";
+import TodayAppointments from "../components/doctor/TodayAppointments";
 
 const DashboardLayout = ({ children }) => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.dir() === "rtl";
   const [selectedSection, setSelectedSection] = useState("patients");
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState("symptom");
+
 
   const sidebarItems = [
-    { key: "symptoms", label: t("symptoms"), icon: "bi-thermometer-half" },
+    { key: "TodayAppointments", label: t("today_appointments"), icon: "bi-calendar-event" },
     { key: "diseases", label: t("diseases"), icon: "bi-emoji-dizzy" },
     { key: "patients", label: t("patients"), icon: "bi-people" },
     { key: "appointments", label: t("appointments"), icon: "bi-calendar-check" },
@@ -23,20 +19,15 @@ const DashboardLayout = ({ children }) => {
 
   const renderContent = () => {
     switch (selectedSection) {
-      case "symptoms":
-        return <SymptomsSection 
-                 onAddClick={() => {
-                   setModalType("symptom");
-                   setShowModal(true);
-                 }}
-               />;
-      case "diseases":
-        return <DiseasesSection 
-                 onAddClick={() => {
-                   setModalType("disease");
-                   setShowModal(true);
-                 }}
-               />;
+      case "TodayAppointments":
+        return <TodayAppointments />;
+      // case "diseases":
+      //   return <DiseasesSection
+      //     onAddClick={() => {
+      //       setModalType("disease");
+      //       setShowModal(true);
+      //     }}
+      //   />;
       case "appointments":
         return <AppointmentsSection />;
       case "patients":
@@ -83,12 +74,7 @@ const DashboardLayout = ({ children }) => {
           </div>
         </div>
       </div>
-      
-      <AddingFormModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        type={modalType}
-      />
+
     </>
   );
 };

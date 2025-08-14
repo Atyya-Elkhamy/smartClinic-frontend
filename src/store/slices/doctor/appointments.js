@@ -1,113 +1,103 @@
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  listAllAppointments,
-  waitingAppointments,
-  checkedAppointments,
-  latedAppointment,
-  patientAppointments,
-  appointmentDetails,
+  todayAppointments,
+  getPatientHistory,
   changeStatus,
+  createTreatment,
+  allPatients,
+  getAppointments,
 } from "../../config/apis";
 
-// Async thunks
 export const fetchAllAppointments = createAsyncThunk(
-  "doctorAppointments/fetchAll",
+  "doctorAppointments/fetchAllAppointments",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await listAllAppointments();
+      const res = await getAppointments();
+      console.log("Fetched all appointments:", res.data);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch all appointments");
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch all appointments"
+      );
     }
   }
 );
 
+// Fetch today's appointments for doctor
+export const fetchTodayAppointments = createAsyncThunk(
+  "doctorAppointments/fetchToday",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await todayAppointments();
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch today's appointments");
+    }
+  }
+);
+
+// Fetch patient history
+export const fetchPatientHistory = createAsyncThunk(
+  "doctorAppointments/fetchHistory",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await getPatientHistory(id);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch patient history");
+    }
+  }
+);
+
+// Change appointment status
 export const changeAppointmentStatus = createAsyncThunk(
   "doctorAppointments/changeStatus",
-  async ({ id, status }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     try {
-      const res = await changeStatus(id, status);
+      const res = await changeStatus(id, data);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to change appointment status");
+      return rejectWithValue(err.response?.data?.message || "Failed to change status");
     }
   }
 );
 
-export const fetchWaitingAppointments = createAsyncThunk(
-  "doctorAppointments/fetchWaiting",
+// Create treatment for appointment
+export const createAppointmentTreatment = createAsyncThunk(
+  "doctorAppointments/createTreatment",
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const res = await createTreatment(id, data);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to create treatment");
+    }
+  }
+);
+
+// Fetch all patients
+export const fetchAllPatients = createAsyncThunk(
+  "doctorAppointments/fetchAllPatients",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await waitingAppointments();
+      const res = await allPatients();
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch waiting appointments");
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch all patients");
     }
   }
 );
 
-export const fetchCheckedAppointments = createAsyncThunk(
-  "doctorAppointments/fetchChecked",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await checkedAppointments();
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch checked appointments");
-    }
-  }
-);
-
-export const fetchLatedAppointment = createAsyncThunk(
-  "doctorAppointments/fetchLated",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await latedAppointment();
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch lated appointment");
-    }
-  }
-);
-
-export const fetchPatientAppointments = createAsyncThunk(
-  "doctorAppointments/fetchPatient",
-  async (id, { rejectWithValue }) => {
-    try {
-      const res = await patientAppointments(id);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch patient appointments");
-    }
-  }
-);
-
-export const fetchAppointmentDetails = createAsyncThunk(
-  "doctorAppointments/fetchDetails",
-  async (id, { rejectWithValue }) => {
-    try {
-      const res = await appointmentDetails(id);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch appointment details");
-    }
-  }
-);
-
-// Initial state
 const initialState = {
-  all: [],
-  waiting: [],
-  checked: [],
-  lated: [],
-  patient: {},
+  today: [],
+  history: [],
+  patients: [],
+  allAppointments: [],
   detail: null,
   loading: false,
   error: null,
 };
 
-// Slice
 const doctorAppointmentsSlice = createSlice({
   name: "doctorAppointments",
   initialState,
@@ -118,50 +108,30 @@ const doctorAppointmentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // All appointments
-      .addCase(fetchAllAppointments.pending, (state) => {
+      // Today's appointments
+      .addCase(fetchTodayAppointments.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllAppointments.fulfilled, (state, action) => {
+      .addCase(fetchTodayAppointments.fulfilled, (state, action) => {
         state.loading = false;
-        state.all = action.payload;
+        state.today = action.payload;
       })
-      .addCase(fetchAllAppointments.rejected, (state, action) => {
+      .addCase(fetchTodayAppointments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Waiting appointments
-      .addCase(fetchWaitingAppointments.fulfilled, (state, action) => {
-        state.waiting = action.payload;
-      })
-
-      // Checked appointments
-      .addCase(fetchCheckedAppointments.fulfilled, (state, action) => {
-        state.checked = action.payload;
-      })
-
-      // Lated appointment
-      .addCase(fetchLatedAppointment.fulfilled, (state, action) => {
-        state.lated = action.payload;
-      })
-
-      // Patient appointments
-      .addCase(fetchPatientAppointments.fulfilled, (state, action) => {
-        state.patient = action.payload;
-      })
-
-      // Appointment details
-      .addCase(fetchAppointmentDetails.pending, (state) => {
+      // Patient history
+      .addCase(fetchPatientHistory.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAppointmentDetails.fulfilled, (state, action) => {
+      .addCase(fetchPatientHistory.fulfilled, (state, action) => {
         state.loading = false;
-        state.detail = action.payload;
+        state.history = action.payload;
       })
-      .addCase(fetchAppointmentDetails.rejected, (state, action) => {
+      .addCase(fetchPatientHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -174,15 +144,43 @@ const doctorAppointmentsSlice = createSlice({
       .addCase(changeAppointmentStatus.fulfilled, (state, action) => {
         state.loading = false;
         const updated = action.payload;
-        state.all = state.all.map((a) => (a.id === updated.id ? updated : a));
+        state.today = state.today.map((appt) =>
+          appt.id === updated.id ? updated : appt
+        );
       })
       .addCase(changeAppointmentStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Create treatment
+      .addCase(createAppointmentTreatment.fulfilled, (state, action) => {
+        const updated = action.payload;
+        state.today = state.today.map((appt) =>
+          appt.id === updated.id ? updated : appt
+        );
+      })
+
+      // All patients
+      .addCase(fetchAllPatients.fulfilled, (state, action) => {
+        state.patients = action.payload;
+      })
+
+      .addCase(fetchAllAppointments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllAppointments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allAppointments = action.payload;
+      })
+      .addCase(fetchAllAppointments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 
-// Exports
 export const { clearAppointmentDetails } = doctorAppointmentsSlice.actions;
 export default doctorAppointmentsSlice.reducer;

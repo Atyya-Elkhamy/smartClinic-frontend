@@ -76,6 +76,11 @@
   "you_do_not_have_permission_to_access_this_page": "You do not have permission to access this page.",
   "go_home": "Go Home",
   "page_not_found": "Page Not Found",
-  "the_page_you_are_looking_for_does_not_exist": "The page you are looking for does not exist."
-
+  "the_page_you_are_looking_for_does_not_exist": "The page you are looking for does not exist.",
+  "today_appointments": "Today's Appointments",
+  "appointment_id": "Appointment ID",
+  "appointment_date": "Appointment Date",
+  "visit_reason": "Visit Reason",
+  "no_appointments": "No appointments found",
+  "loading": "Loading..."
 }

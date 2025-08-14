@@ -69,6 +69,12 @@
   "login_as": "تسجيل الدخول كـ",
   "patient": "مريض",
   "doctor": "طبيب",
-  "unexpected_error": "حدث خطأ غير متوقع"
+  "unexpected_error": "حدث خطأ غير متوقع",
+  "today_appointments": "مواعيد اليوم",
+  "appointment_id": "رقم الموعد",
+  "appointment_date": "تاريخ الموعد",
+  "visit_reason": "سبب الزيارة",
+  "no_appointments": "لا توجد مواعيد",
+  "loading": "جارٍ التحميل..."
 
 }

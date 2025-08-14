@@ -13,7 +13,6 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "patient",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -89,22 +88,6 @@ const Login = () => {
               {formErrors.password && (
                 <div className="invalid-feedback">{formErrors.password}</div>
               )}
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="role" className="form-label fw-semibold text-secondary">
-                {t("login_as")}
-              </label>
-              <select
-                id="role"
-                name="role"
-                className="form-select"
-                value={formData.role}
-                onChange={handleChange}
-              >
-                <option value="patient">{t("patient")}</option>
-                <option value="doctor">{t("doctor")}</option>
-              </select>
             </div>
 
             <button
