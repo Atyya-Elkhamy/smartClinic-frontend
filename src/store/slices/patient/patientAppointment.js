@@ -16,6 +16,7 @@ export const fetchAllAppointments = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllAppointments();
+      console.log("Fetched appointments:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching appointments", error?.response?.data || error.message);
