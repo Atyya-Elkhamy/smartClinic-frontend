@@ -52,11 +52,11 @@ const Header = () => {
               </Link>
             
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="nav-link fw-bold fs-5" to="/services" style={{ color: "var(--sc-secondary)" }}>
                 {t("Services")}
               </Link> 
-            </li>
+            </li> */}
           </ul>
 
           {/* Right side controls */}

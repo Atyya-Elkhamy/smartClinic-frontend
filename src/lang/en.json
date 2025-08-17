@@ -58,13 +58,10 @@
   "patients": "Patients",
   "appointments": "Appointments",
   "about": "About Smart Clinic",
-  "contact_us": "Contact Us",
-  "about_us": "About Us",
-  "our_location":" Our Location",
+  
   "add_symptom": "Add Symptom",
   "add_disease": "Add Disease",
-  "address": "Address",
-  "age": "Age",
+   "age": "Age",
   "gender": "Gender",
   "male": "Male",
   "login_as": "Login as",
@@ -120,5 +117,31 @@
   "appointment_date": "Appointment Date",
   "visit_reason": "Visit Reason",
   "no_appointments": "No appointments found",
-  "loading": "Loading..."
+  "loading": "Loading..." ,
+  "clinic_name": "Smart Clinic",
+
+  "about_us": "About Us",
+  "about_us_description": "We deliver compassionate, modern healthcare powered by smart technology and a trusted medical team.",
+  "about_us_mission": "Our mission is to provide accessible, high-quality healthcare to all, fostering a healthier and happier community.",
+
+  "years_experience": "Years of Care",
+  "patients_served": "Patients Served",
+  "patient_rating": "Average Satisfaction",
+
+  "human_care": "Human-Centered Care",
+  "human_care_desc": "Empathy first, always. We listen and guide your health journey.",
+  "smart_tech": "Smart Technology",
+  "smart_tech_desc": "Online booking, telehealth, and secure digital records.",
+  "accessibility": "Accessibility",
+  "accessibility_desc": "Same-day slots and flexible care options for busy lives.",
+
+  "contact_us": "Contact Us",
+  
+  "address": "Address",
+
+  "ready_to_feel_better": "Ready to feel better?",
+  "start_video_visit_now": "Book a same-day appointment or start a video visit now.",
+   
+  "our_location": "Our Location",
+  "your_location": "Your Location" 
 }
