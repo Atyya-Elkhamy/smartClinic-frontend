@@ -6,7 +6,7 @@ import {
   deletePatientAppointment,
   getTodayAppointment,
   getAppointmentTime,
-  getAppointmenTreatment,
+  getAppointmentTreatment,
   getAppointmentDetails,
 } from "../../config/apis";
 
@@ -67,7 +67,7 @@ export const fetchAppointmentTreatment = createAsyncThunk(
   "appointments/treatment",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await getAppointmenTreatment(id);
+      const response = await getAppointmentTreatment(id);
       console.log(response.data)
       return { id, treatments: response.data };
     } catch (error) {

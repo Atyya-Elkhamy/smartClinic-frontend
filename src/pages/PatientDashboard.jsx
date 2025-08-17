@@ -1,15 +1,79 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import AppointmentTreatments from "../components/patient/AppointmentTreatments";
 import TodayAppointments from "../components/patient/TodayAppointments";
 import AllAppointments from "../components/patient/AllAppointments";
 
-const PatientData = () => {
+const PatientDashboard = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+  const [selectedSection, setSelectedSection] = useState("todayAppointments");
+
+  const sidebarItems = [
+    { key: "todayAppointments", label: t("today_appointments"), icon: "bi-calendar-event" },
+    { key: "allAppointments", label: t("all_appointments"), icon: "bi-calendar-check" },
+    { key: "treatments", label: t("treatments"), icon: "bi-capsule-pill" },
+  ];
+
+  const renderContent = () => {
+    switch (selectedSection) {
+      case "todayAppointments":
+        return <TodayAppointments />;
+      case "allAppointments":
+        return <AllAppointments />;
+      case "treatments":
+        return <AppointmentTreatments appointmentId={14} />; 
+      default:
+        return <TodayAppointments />;
+    }
+  };
+
   return (
-    <div>
-      <AppointmentTreatments />
-      <TodayAppointments />
-      <AllAppointments />
+    <div className="container-fluid px-0">
+      <div className="row g-0" style={{ minHeight: "100vh" }}>
+        {/* Sidebar */}
+        <div
+          className={`col-md-3 col-lg-2 bg-dark text-white shadow-sm d-flex flex-column p-3 ${
+            isRTL ? "text-end" : "text-start"
+          }`}
+        >
+          <h4 className="text-center mb-4">{t("patient_dashboard_title")}</h4>
+          <ul className="nav nav-pills flex-column mb-auto">
+            {sidebarItems.map((item) => (
+              <li className="nav-item" key={item.key}>
+                <button
+                  className={`nav-link w-100 fw-bold ${
+                    isRTL ? "text-end" : "text-start"
+                  } text-white ${
+                    selectedSection === item.key ? "bg-primary" : "text-white-50"
+                  }`}
+                  onClick={() => setSelectedSection(item.key)}
+                >
+                  <i className={`bi ${item.icon} ${isRTL ? "ms-2" : "me-2"}`} />
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <hr className="text-secondary" />
+          <div className="text-center small mt-auto">
+            <i className="bi bi-heart-pulse-fill text-danger mx-1"></i>
+            Smart Clinic
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="col-md-9 col-lg-10 bg-light p-4">
+          <div className="card shadow border-0">
+            <div className="card-body bg-white rounded-bottom">
+              {renderContent()}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default PatientData;
+export default PatientDashboard;

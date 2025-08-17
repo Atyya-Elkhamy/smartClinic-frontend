@@ -18,6 +18,6 @@ export const addPatientAppointment = (data) => axiosInstance.post("/patient/appo
 export const updatePatientAppointment = (id, data) => axiosInstance.put(`/patient/appointments/update/${id}/`, data);
 export const deletePatientAppointment = (id) => axiosInstance.delete(`/patient/appointments/delete/${id}/`);
 export const getTodayAppointment = () => axiosInstance.get(`/patient/appointments/today/`);
-export const getAppointmentTime = (id) => axiosInstance.get(`patient/expected-time/${id}/`);
-export const getAppointmenTreatment = (id) => axiosInstance.get(`patient/treatments/${id}/`); 
-export const getAppointmentDetails = (id) => axiosInstance.get(`patient/appointments/${id}/`);
+export const getAppointmentTime = (id) => axiosInstance.get(`/patient/expected-time/${id}/`);
+export const getAppointmentTreatment = (id) => axiosInstance.get(`/patient/treatments/${id}/`);
+export const getAppointmentDetails = (id) => axiosInstance.get(`/patient/appointments/${id}/`);

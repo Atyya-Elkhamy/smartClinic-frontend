@@ -1,10 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllAppointments, deleteAppointmentById } from "../../store/slices/patient/patientAppointment";
+import {
+  fetchAllAppointments,
+  deleteAppointmentById,
+} from "../../store/slices/patient/patientAppointment";
+import AppointmentDetails from "./AppointmentDetails";
+import AppointmentTreatments from "./AppointmentTreatments";
 
 const AllAppointments = () => {
   const dispatch = useDispatch();
-  const { appointments, loading, error } = useSelector((state) => state.appointments);
+  const { appointments, loading, error } = useSelector(
+    (state) => state.appointments
+  );
+
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [viewMode, setViewMode] = useState(null); // "details" or "treatment"
 
   useEffect(() => {
     dispatch(fetchAllAppointments());
@@ -16,20 +26,10 @@ const AllAppointments = () => {
     }
   };
 
-  const handleDetails = (appt) => {
-    alert(`
-      Visit Reason: ${appt.visit_reason}
-      Symptoms: ${appt.symptoms}
-      Diseases: ${appt.diseases}
-      Treatments: ${appt.treatments}
-      Status: ${appt.status}
-      Expected Time: ${appt.expected_check_time}
-    `);
-  };
-
   if (loading) return <p>Loading appointments...</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
-  if (!appointments || appointments.length === 0) return <p>No appointments found.</p>;
+  if (!appointments || appointments.length === 0)
+    return <p>No appointments found.</p>;
 
   return (
     <div className="p-4">
@@ -64,9 +64,21 @@ const AllAppointments = () => {
               <td>
                 <button
                   className="btn btn-sm btn-info me-2"
-                  onClick={() => handleDetails(appt)}
+                  onClick={() => {
+                    setSelectedAppointmentId(appt.id);
+                    setViewMode("details");
+                  }}
                 >
                   Details
+                </button>
+                <button
+                  className="btn btn-sm btn-success me-2"
+                  onClick={() => {
+                    setSelectedAppointmentId(appt.id);
+                    setViewMode("treatment");
+                  }}
+                >
+                  View Treatment
                 </button>
                 <button
                   className="btn btn-sm btn-danger"
@@ -79,6 +91,19 @@ const AllAppointments = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Show Details OR Treatment depending on button */}
+      {selectedAppointmentId && viewMode === "details" && (
+        <div className="mt-4">
+          <AppointmentDetails id={selectedAppointmentId} />
+        </div>
+      )}
+
+      {selectedAppointmentId && viewMode === "treatment" && (
+        <div className="mt-4">
+          <AppointmentTreatments appointmentId={selectedAppointmentId} />
+        </div>
+      )}
     </div>
   );
 };
